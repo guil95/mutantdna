@@ -18,3 +18,7 @@ test:
 
 coverage:
 	go tool cover -func=count.out
+
+mock-generate:
+	go mod vendor
+	docker run --rm -v "$(PWD):/app" -w /app -t vektra/mockery --all --dir ./internal/domain --case underscore

@@ -5,24 +5,27 @@ import (
 )
 
 type (
-	DNAType    string
-	DNA        []string
-	HumanError struct{}
+	DNAType     string
+	DNASequence []string
+	HumanError  struct{}
 )
 
 func (h HumanError) Error() string {
-	return "dna is human"
+	return humanError
 }
 
 const (
 	HumanDNA  DNAType = "Human"
 	MutantDNA DNAType = "Mutant"
+
+	humanError = "dna is human"
+	statsNotFound = "stats not found"
 )
 
-type Mutant struct {
-	ID   string  `json:"id"`
-	DNA  DNA     `json:"dna"`
-	Type DNAType `json:"type"`
+type DNA struct {
+	ID   string      `json:"id"`
+	DNASequence  DNASequence `json:"dna"`
+	Type DNAType     `json:"type"`
 }
 
 type Stats struct {
@@ -31,7 +34,7 @@ type Stats struct {
 	Ratio          float64 `json:"ratio"`
 }
 
-func IsMutant(dna DNA) bool {
+func IsMutant(dna DNASequence) bool {
 	mutantChan := make(chan int)
 	humanChan := make(chan int)
 
@@ -45,7 +48,7 @@ func IsMutant(dna DNA) bool {
 	}
 }
 
-func verifyDNA(dnas DNA, mutantChan, humanChan chan int) {
+func verifyDNA(dnas DNASequence, mutantChan, humanChan chan int) {
 	horizontals := make(map[int]string)
 	diagonals := make(map[int]string)
 	dnaLength := 5

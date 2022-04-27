@@ -2,19 +2,19 @@ package server
 
 import (
 	"fmt"
+	"github.com/guil95/mutantdna/internal/usecase"
 	"log"
 	"net/http"
 	"regexp"
 
 	"github.com/gin-gonic/gin"
-	"github.com/guil95/mutantdna/internal/domain"
 )
 
 type server struct {
-	uc *domain.UseCase
+	uc *usecase.UseCase
 }
 
-func NewServer(uc *domain.UseCase) *server {
+func NewServer(uc *usecase.UseCase) *server {
 	return &server{uc: uc}
 }
 
@@ -22,7 +22,7 @@ func (s *server) Run() {
 	router := gin.Default()
 
 	router.GET("/", func(context *gin.Context) {
-		context.JSON(http.StatusOK, gin.H{"message": "Mutant DNA API"})
+		context.JSON(http.StatusOK, gin.H{"message": "DNA DNASequence API"})
 	})
 
 	router.POST("/mutant", s.isMutant)
@@ -36,8 +36,7 @@ func (s *server) isMutant(ctx *gin.Context) {
 		Dna []string `json:"dna"`
 	}
 	if err := ctx.ShouldBindJSON(&payload); err != nil {
-		log.Println(err)
-		ctx.Status(http.StatusInternalServerError)
+		handleError(err, ctx)
 		return
 	}
 
@@ -48,7 +47,7 @@ func (s *server) isMutant(ctx *gin.Context) {
 
 	err := s.uc.SaveDna(ctx, payload.Dna)
 	if err != nil {
-		ctx.Status(http.StatusForbidden)
+		handleError(err, ctx)
 		return
 	}
 
@@ -58,12 +57,7 @@ func (s *server) isMutant(ctx *gin.Context) {
 func (s *server) stats(ctx *gin.Context) {
 	stats, err := s.uc.RetrieveStats(ctx)
 	if err != nil {
-		ctx.Status(http.StatusInternalServerError)
-		return
-	}
-
-	if stats == nil {
-		ctx.Status(http.StatusNotFound)
+		handleError(err, ctx)
 		return
 	}
 

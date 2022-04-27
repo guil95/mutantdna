@@ -9,7 +9,7 @@ import (
 
 func TestMutant(t *testing.T) {
 	mutants := []struct{
-		dna DNA
+		dna    DNASequence
 		result bool
 	}{
 		{[]string{"ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCCCTA", "TCACTG"}, true}, //vertical
@@ -26,7 +26,7 @@ func TestMutant(t *testing.T) {
 	}
 
 	humans := []struct{
-		dna DNA
+		dna    DNASequence
 		result bool
 	}{
 		{[]string{"ATGCGA", "CAGTGC", "TTATGT", "AGAGAG", "CCCTTA", "TCACTG"}, false},
