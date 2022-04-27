@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mutant-api
+    depends_on:
+      - database
+    ports:
+      - "80:80"
+    env_file:
+      - .env
+    restart: always
+    platform: linux/amd64
+    networks:
+      - mutant
+  database:
+    image: 'postgres:9.6.6'
+    environment:
+      POSTGRES_USER: mutant_user
+      POSTGRES_PASSWORD: mut4ant
+      POSTGRES_DB: mutant
+    ports:
+      - "5432:5432"
+    networks:
+      - mutant
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    container_name: mutant-db
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile.migrate
+    networks:
+      - mutant
+    command: [ "-path", "/migrations", "-database",  "postgres://mutant_user:mut4ant@database:5432/mutant?sslmode=disable", "up" ]
+    links:
+      - database
+networks:
+  mutant:
+    name: mutant
