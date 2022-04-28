@@ -68,6 +68,10 @@ func validPayload(dnas []string) bool {
 	const dnaLength = 6
 	pattern := "^[ATCGatcg]+$"
 
+	if len(dnas) < dnaLength {
+		return false
+	}
+
 	for _, dna := range dnas {
 		if len(dna) < dnaLength {
 			return false
