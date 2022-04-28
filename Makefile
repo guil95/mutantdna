@@ -11,6 +11,10 @@ start:
 	go mod tidy
 	docker-compose up -d
 
+start-migrate:
+	make start
+	make migrate
+
 test:
 	touch count.out
 	go test -covermode=count -coverprofile=count.out -v ./...
