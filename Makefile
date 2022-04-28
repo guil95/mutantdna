@@ -9,7 +9,7 @@ migrate:
 start:
 	go mod vendor
 	go mod tidy
-	docker-compose up -d
+	docker-compose up --build -d
 
 start-migrate:
 	make start
