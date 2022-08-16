@@ -1,3 +1,6 @@
+[![Build](https://github.com/guil95/mutantdna/actions/workflows/go.yml/badge.svg)](https://github.com/guil95/mutantdna/actions/workflows/go.yml) 
+[![Coverage](https://img.shields.io/codecov/c/github/guil95/mutantdna)](https://github.com/guil95/mutantdna/actions/workflows/go.yml)
+
 # mutant-dna
 
 # Como subir a aplicação
